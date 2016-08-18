@@ -38,4 +38,8 @@ main = hspec $ do
     it "can get the coords of a row based on one coord" $ do
       let rCoords = [(0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,7),(7,7),(8,7)]
       (rowCoords 7) `shouldBe` rCoords
+    it "can get ninth coords" $ do
+      let nCoords = [(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,6),(8,7),(8,8)]
+      (ninthCoords (8, 7)) `shouldBe` nCoords
+
     

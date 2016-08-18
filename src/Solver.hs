@@ -23,3 +23,14 @@ colCoords x = map (colAssist x) [0..8]
 rowCoords :: Int -> [(Int, Int)]
 rowCoords y = map (rowAssit y) [0..8]
   where rowAssit y x = (x, y)
+
+ninthCoords :: (Int, Int) -> [(Int, Int)]
+ninthCoords (x, y) | x <= 2 = ninthAssist [0..2] y
+                   | x <= 5 = ninthAssist [3..5] y
+                   | otherwise = ninthAssist [6..8] y
+  where ninthAssist z y | y <= 2 = comb z [0..2]
+                        | y <= 5 = comb z [3..5]
+                        | otherwise = comb z [6..8]
+          where comb v w =  (,) <$> v <*> w
+
+

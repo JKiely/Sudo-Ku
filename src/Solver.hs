@@ -12,3 +12,14 @@ indexToCoords index = (xCoord index, yCoord index)
 
 coordsToIndex :: (Int, Int) -> Int
 coordsToIndex (x, y) = (y*9)+x
+
+--getGroupCoords :: (Int, Int) -> [(Int, Int)]
+--getGroupCoords (x, y) = (rowCoords x) : (colCoords y) : ninthCoords (x,y)
+
+colCoords :: Int -> [(Int, Int)]
+colCoords x = map (colAssist x) [0..8]
+  where colAssist x y = (x, y)
+
+rowCoords :: Int -> [(Int, Int)]
+rowCoords y = map (rowAssit y) [0..8]
+  where rowAssit y x = (x, y)

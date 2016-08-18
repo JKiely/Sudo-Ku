@@ -18,6 +18,9 @@ coordsToIndex (x, y) = (y*9)+x
 getGroupCoords :: (Int, Int) -> [(Int, Int)]
 getGroupCoords (x, y) = Set.toList (Set.fromList ((colCoords x) ++ (rowCoords y) ++ ninthCoords (x,y)))
 
+getGroupIndices :: (Int, Int) -> [Int]
+getGroupIndices (x,y) = map coordsToIndex $ getGroupCoords (x,y)
+
 colCoords :: Int -> [(Int, Int)]
 colCoords x = map (colAssist x) [0..8]
   where colAssist x y = (x, y)

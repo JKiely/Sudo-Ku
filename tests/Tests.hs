@@ -44,3 +44,6 @@ main = hspec $ do
     it "can get group coords" $ do
       let gCoords = [(0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6),(8,7),(8,8)]
       (getGroupCoords (8, 7)) `shouldBe` gCoords
+    it "can get group indices" $ do
+      let gIndices = [63,64,65,66,67,68,60,69,78,61,70,79,8,17,26,35,44,53,62,71,80]
+      (getGroupIndices (8, 7)) `shouldBe` gIndices

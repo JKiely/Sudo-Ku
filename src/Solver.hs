@@ -9,3 +9,6 @@ indexToCoords :: Int -> (Int, Int)
 indexToCoords index = (xCoord index, yCoord index)
   where xCoord index = (mod index 9)
         yCoord index = (div index 9)
+
+coordsToIndex :: (Int, Int) -> Int
+coordsToIndex (x, y) = (y*9)+x

@@ -30,3 +30,5 @@ main = hspec $ do
       (isFull [2,0,4,5]) `shouldBe` False
     it "can get coords" $ do
       (indexToCoords 71) `shouldBe` (8,7)
+    it "can get an index from coords" $ do
+      (coordsToIndex (8, 7)) `shouldBe` 71

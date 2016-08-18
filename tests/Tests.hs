@@ -41,5 +41,6 @@ main = hspec $ do
     it "can get ninth coords" $ do
       let nCoords = [(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,6),(8,7),(8,8)]
       (ninthCoords (8, 7)) `shouldBe` nCoords
-
-    
+    it "can get group coords" $ do
+      let gCoords = [(0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6),(8,7),(8,8)]
+      (getGroupCoords (8, 7)) `shouldBe` gCoords

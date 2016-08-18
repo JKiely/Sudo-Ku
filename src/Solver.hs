@@ -1,5 +1,7 @@
 module Solver where
 
+import qualified Data.Set as Set
+
 isFull :: [Int] -> Bool
 isFull [] = True
 isFull (x:xs) | x == 0 = False
@@ -13,8 +15,8 @@ indexToCoords index = (xCoord index, yCoord index)
 coordsToIndex :: (Int, Int) -> Int
 coordsToIndex (x, y) = (y*9)+x
 
---getGroupCoords :: (Int, Int) -> [(Int, Int)]
---getGroupCoords (x, y) = (rowCoords x) : (colCoords y) : ninthCoords (x,y)
+getGroupCoords :: (Int, Int) -> [(Int, Int)]
+getGroupCoords (x, y) = Set.toList (Set.fromList ((colCoords x) ++ (rowCoords y) ++ ninthCoords (x,y)))
 
 colCoords :: Int -> [(Int, Int)]
 colCoords x = map (colAssist x) [0..8]

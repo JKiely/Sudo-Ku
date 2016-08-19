@@ -38,4 +38,6 @@ ninthCoords (x, y) | x <= 2 = ninthAssist [0..2] y
                         | otherwise = comb z [6..8]
           where comb v w =  (,) <$> v <*> w
 
-
+getGroupValues :: (Int, Int) -> [Int] -> [Int]
+getGroupValues (x, y) z = map (getValue z) (getGroupIndices (x, y))
+  where getValue v w = v !! w

@@ -24,6 +24,15 @@ main = hspec $ do
       grid `shouldBe`  outputArray
 
   describe "Solver" $ do
+    let board = [4, 0, 0, 0, 0, 0, 8, 0, 5,
+                 0, 3, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 7, 0, 0, 0, 0, 0,
+                 0, 2, 0, 0, 0, 0, 0, 6, 0,
+                 0, 0, 0, 0, 8, 0, 4, 0, 0,
+                 0, 0, 0, 0, 1, 0, 0, 0, 0,
+                 0, 0, 0, 6, 0, 3, 0, 7, 0,
+                 5, 0, 0, 2, 0, 0, 0, 0, 0,
+                 1, 0, 4, 0, 0, 0, 0, 0, 0]
     it "checks if a board is full" $ do
       (isFull [2,3,4,5]) `shouldBe` True
     it "knows if board isn't full" $ do
@@ -47,3 +56,7 @@ main = hspec $ do
     it "can get group indices" $ do
       let gIndices = [63,64,65,66,67,68,60,69,78,61,70,79,8,17,26,35,44,53,62,71,80]
       (getGroupIndices (8, 7)) `shouldBe` gIndices
+    it "can get group values" $ do
+      let gValues = [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0,0]
+      (getGroupValues (8, 7) board) `shouldBe` gValues
+                    

@@ -7,6 +7,12 @@ isFull [] = True
 isFull (x:xs) | x == 0 = False
               | otherwise = isFull xs
 
+isLegit :: [Int] -> Bool
+isLegit x = (legitAssist x) [0..80]
+  where legitAssist x y | y == [] = True
+                        | elem (getValue x (head y)) (getGroupValues (indexToCoords (head y)) x) = False
+                        | otherwise = legitAssist x (tail y)
+
 indexToCoords :: Int -> (Int, Int)
 indexToCoords index = (xCoord index, yCoord index)
   where xCoord index = (mod index 9)
@@ -16,10 +22,10 @@ coordsToIndex :: (Int, Int) -> Int
 coordsToIndex (x, y) = (y*9)+x
 
 getGroupCoords :: (Int, Int) -> [(Int, Int)]
-getGroupCoords (x, y) = Set.toList (Set.fromList ((colCoords x) ++ (rowCoords y) ++ ninthCoords (x,y)))
+getGroupCoords (x, y) =  (Set.toList (Set.fromList ((colCoords x) ++ (rowCoords y) ++ ninthCoords (x,y))))
 
 getGroupIndices :: (Int, Int) -> [Int]
-getGroupIndices (x,y) = map coordsToIndex $ getGroupCoords (x,y)
+getGroupIndices (x,y) = (dropValue (coordsToIndex (x,y))) $ map coordsToIndex $ getGroupCoords (x,y)
 
 colCoords :: Int -> [(Int, Int)]
 colCoords x = map (colAssist x) [0..8]
@@ -40,10 +46,9 @@ ninthCoords (x, y) | x <= 2 = ninthAssist [0..2] y
 
 getGroupValues :: (Int, Int) -> [Int] -> [Int]
 getGroupValues (x, y) z = map (getValue z) (getGroupIndices (x, y))
-  where getValue v w = v !! w
 
-getGroupConstraints :: (Int, Int) -> [Int] -> [Int]
-getGroupConstraints (x, y) z = [x, y]
+getValue :: [Int] -> Int -> Int
+getValue v w = v !! w
 
 getConstraints :: (Int, Int) -> [Int] -> [Int]
 getConstraints (x, y) z = dropValue 0 (Set.toList (Set.fromList (getGroupValues (x, y) z)))

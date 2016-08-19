@@ -51,20 +51,39 @@ main = hspec $ do
       let nCoords = [(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,6),(8,7),(8,8)]
       (ninthCoords (8, 7)) `shouldBe` nCoords
     it "can get group coords" $ do
-      let gCoords = [(0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6),(8,7),(8,8)]
+      let gCoords = [(0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6), (8,7),(8,8)]
       (getGroupCoords (8, 7)) `shouldBe` gCoords
     it "can get group indices" $ do
-      let gIndices = [63,64,65,66,67,68,60,69,78,61,70,79,8,17,26,35,44,53,62,71,80]
+      let gIndices = [63,64,65,66,67,68,60,69,78,61,70,79,8,17,26,35,44,53,62,80]
       (getGroupIndices (8, 7)) `shouldBe` gIndices
     it "can get group values" $ do
-      let gValues = [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0,0]
+      let gValues = [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0]
       (getGroupValues (8, 7) board) `shouldBe` gValues
     it "can get constraints" $ do
       let constraints = [2,5,7]
       (getConstraints (8,7) board) `shouldBe` constraints
-    --it "can get group constraints" $ do
-    --  let gConstraints = [5,2,7]
-    --  (getGroupConstraints (8,7) board) `shouldBe` gConstraints
     it "can drop values from a list" $ do
       let l =  [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0,0]
       dropValue 0 l `shouldBe` [5,2,7,5]
+    it "knows if a solution is legit" $ do
+      let complete = [4,8,3,9,2,1,6,5,7,
+                      9,6,7,3,4,5,8,2,1,
+                      2,5,1,8,7,6,4,9,3,
+                      5,4,8,1,3,2,9,7,6,
+                      7,2,9,5,6,4,1,3,8,
+                      1,3,6,7,9,8,2,4,5,
+                      3,7,2,6,8,9,5,1,4,
+                      8,1,4,2,5,3,7,6,9,
+                      6,9,5,4,1,7,3,8,2]
+      (isLegit complete) `shouldBe` True
+    it "knows if a solution is wrong" $ do
+      let wrong =  [4,8,3,9,2,1,6,5,7,
+                    9,6,7,3,4,5,8,2,1,
+                    2,5,1,8,7,6,4,9,3,
+                    5,4,8,1,3,2,9,7,6,
+                    7,2,9,5,6,4,1,3,8,
+                    1,3,6,7,9,8,2,4,5,
+                    3,7,2,6,8,9,5,1,4,
+                    8,1,4,2,5,3,7,6,9,
+                    6,9,5,4,1,7,3,8,9]
+      (isLegit wrong) `shouldBe` False

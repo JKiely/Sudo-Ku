@@ -41,3 +41,15 @@ ninthCoords (x, y) | x <= 2 = ninthAssist [0..2] y
 getGroupValues :: (Int, Int) -> [Int] -> [Int]
 getGroupValues (x, y) z = map (getValue z) (getGroupIndices (x, y))
   where getValue v w = v !! w
+
+getGroupConstraints :: (Int, Int) -> [Int] -> [Int]
+getGroupConstraints (x, y) z = [x, y]
+
+getConstraints :: (Int, Int) -> [Int] -> [Int]
+getConstraints (x, y) z = dropValue 0 (Set.toList (Set.fromList (getGroupValues (x, y) z)))
+
+dropValue :: Int -> [Int] -> [Int]
+dropValue x ls | ls == [] = []
+               | head ls == x = (dropValue x $ tail ls)
+               | head ls /= x = head ls : (dropValue x $ tail ls)
+

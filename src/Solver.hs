@@ -42,8 +42,8 @@ findLegit (ba, bb) (x:xs) i = if legitCell nl i then (nl, xs) else findLegit (ba
                                 where nl = (ba ++ [x] ++ bb)
                                       
 
---boardSolve :: Board -> Board
-
+boardSolve :: Board -> Board
+boardSolve board = fst $ head (pathSolve [(board, [1..9])])
 
 
 

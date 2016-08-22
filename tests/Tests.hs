@@ -41,21 +41,21 @@ main = hspec $ do
       (indexToCoords 71) `shouldBe` (8,7)
     it "can get an index from coords" $ do
       (coordsToIndex (8, 7)) `shouldBe` 71
-    it "can get the coords of a col based on one coord" $ do
+    it "can get the coords of a col based on one coord" $ do -- Refactor
       let cCoords = [(8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6),(8,7),(8,8)]
       (colCoords 8) `shouldBe` cCoords
-    it "can get the coords of a row based on one coord" $ do
+    it "can get the coords of a row based on one coord" $ do -- Refactor
       let rCoords = [(0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,7),(7,7),(8,7)]
       (rowCoords 7) `shouldBe` rCoords
-    it "can get ninth coords" $ do
+    it "can get ninth coords" $ do -- Refactor 
       let nCoords = [(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,6),(8,7),(8,8)]
       (ninthCoords (8, 7)) `shouldBe` nCoords
-    it "can get group coords" $ do
+    it "can get group coords" $ do -- Refactor, redundant?
       let gCoords = [(0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6), (8,7),(8,8)]
       (getGroupCoords (8, 7)) `shouldBe` gCoords
     it "can get group indices" $ do
       let gIndices = [63,64,65,66,67,68,60,69,78,61,70,79,8,17,26,35,44,53,62,80]
-      (getGroupIndices (8, 7)) `shouldBe` gIndices
+      (getGroupIndices 71) `shouldBe` gIndices
     it "can get group values" $ do
       let gValues = [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0]
       (getGroupValues (8, 7) board) `shouldBe` gValues
@@ -87,3 +87,14 @@ main = hspec $ do
                     8,1,4,2,5,3,7,6,9,
                     6,9,5,4,1,7,3,8,9]
       (isLegit wrong) `shouldBe` False
+    it "Knows if a cell is wrong" $ do
+      let wrong =  [4,8,3,9,2,1,6,5,7,
+                    9,6,7,3,4,5,8,2,1,
+                    2,5,1,8,7,6,4,9,3,
+                    5,4,8,1,3,2,9,7,6,
+                    7,2,9,5,6,4,1,3,8,
+                    1,3,6,7,9,8,2,4,5,
+                    3,7,2,6,8,9,5,1,4,
+                    8,1,4,2,5,3,7,6,9,
+                    6,9,5,4,1,7,3,8,9]
+       (legitCell wrong 80) `shouldBe` False

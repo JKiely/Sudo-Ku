@@ -3,6 +3,16 @@ module Solver where
 import qualified Data.Set as Set
 import Data.List (findIndex,splitAt)
 
+unsolved = [0,0,0,0,2,1,6,5,7,
+            9,6,7,3,4,5,8,0,1,
+            2,5,0,8,7,6,4,9,3,
+            5,4,8,1,3,2,9,7,6,
+            7,2,9,5,6,4,1,3,8,
+            1,3,6,7,9,8,0,4,5,
+            3,0,2,6,8,9,5,1,4,
+            8,1,4,2,5,3,7,6,9,
+            6,9,5,4,1,7,3,0,0]::Board
+
 -------------------------------------------------------
 -- Solver
 -------------------------------------------------------
@@ -23,22 +33,32 @@ legitCell board i = not $ elem (getValue board i) (getGroupValues (indexToCoords
                  
 
 pathSolve :: Path -> Path
-pathSolve (current:p) = case current of (_, []) -> pathSolve (tail p)
-                                        (b, x) -> let  i = findIndex (==0) b
-                                                  in
-                                                    case i of Nothing -> [(b, [])]
-                                                              (Just val) -> let (new, x') = makeMove b x val
-                                                                            in
-                                                                              (new,[1..9]) : (b,x') : p
+pathSolve (current:p) = pathHelper current p
+--pathSolve (current:p) = case current of (_, []) -> error "Right Path"-- pathSolve p
+--                                        (b, x) -> let  i = findIndex (==0) b
+--                                                  in
+--                                                    case i of Nothing -> [(b, [])]
+--                                                              (Just val) -> let (new, x') = makeMove b x val
+--                                                                           in
+--                                                                              pathSolve $ (new,[1..9]) : (b,x') : p
+
+pathHelper :: (Board,[Int]) -> Path -> Path
+pathHelper (board,[]) p = pathSolve p
+pathHelper (board,moves) p = if i == -1
+                             then [(board,[])]
+                             else case makeMove board moves i of Nothing -> pathSolve p
+                                                                 Just (new,moves') -> pathSolve $ (new,[1..9]) : (board,moves') : p 
+  where i = maybe (-1) id (findIndex (==0) board)
 
 
-makeMove :: Board -> [Int] -> Int -> (Board, [Int])
+makeMove :: Board -> [Int] -> Int -> Maybe (Board, [Int])
 makeMove board x i = findLegit (ba, bbs) x i
   where (ba, bb:bbs) = splitAt i board
        
 
-findLegit :: ([Int],[Int]) -> [Int] -> Int -> (Board, [Int])
-findLegit (ba, bb) (x:xs) i = if legitCell nl i then (nl, xs) else findLegit (ba, bb) xs i
+findLegit :: ([Int],[Int]) -> [Int] -> Int -> Maybe (Board, [Int])
+findLegit (ba, bb) [] _ = Nothing
+findLegit (ba, bb) (x:xs) i = if legitCell nl i then Just (nl, xs) else findLegit (ba, bb) xs i
                                 where nl = (ba ++ [x] ++ bb)
                                       
 

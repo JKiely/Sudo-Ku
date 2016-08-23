@@ -29,18 +29,11 @@ isLegit :: Board -> Bool
 isLegit board = and $ map (legitCell board) [0..80]
 
 legitCell :: Board -> Int -> Bool
-legitCell board i = not $ elem (getValue board i) (getGroupValues (indexToCoords i) board)
+legitCell board i = not $ elem (getValue board i) (getGroupValues i board)
                  
 
 pathSolve :: Path -> Path
 pathSolve (current:p) = pathHelper current p
---pathSolve (current:p) = case current of (_, []) -> error "Right Path"-- pathSolve p
---                                        (b, x) -> let  i = findIndex (==0) b
---                                                  in
---                                                    case i of Nothing -> [(b, [])]
---                                                              (Just val) -> let (new, x') = makeMove b x val
---                                                                           in
---                                                                              pathSolve $ (new,[1..9]) : (b,x') : p
 
 pathHelper :: (Board,[Int]) -> Path -> Path
 pathHelper (board,[]) p = pathSolve p
@@ -103,14 +96,14 @@ ninthCoords (x, y) | x <= 2 = ninthAssist [0..2] y
                         | otherwise = comb z [6..8]
           where comb v w =  (,) <$> v <*> w
 
-getGroupValues :: (Int, Int) -> [Int] -> [Int]
-getGroupValues (x, y) z = map (getValue z) (getGroupIndices (coordsToIndex (x, y)))
+getGroupValues :: Int -> [Int] -> [Int]
+getGroupValues i z = map (getValue z) (getGroupIndices i)
 
 getValue :: [Int] -> Int -> Int
 getValue v w = v !! w
 
-getConstraints :: (Int, Int) -> [Int] -> [Int]
-getConstraints (x, y) z = dropValue 0 (Set.toList (Set.fromList (getGroupValues (x, y) z)))
+getConstraints :: Int -> [Int] -> [Int]
+getConstraints i z = dropValue 0 (Set.toList (Set.fromList (getGroupValues i z)))
 
 dropValue :: Int -> [Int] -> [Int]
 dropValue x ls | ls == [] = []

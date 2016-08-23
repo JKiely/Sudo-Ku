@@ -13,7 +13,7 @@ isLegit board = and $ map (legitCell board) [0..80]
 
 -- Returns if a cell is currently not clashing with neighbors
 legitCell :: Board -> Int -> Bool
-legitCell board i = not $ elem (getValue board i) (getGroupValues i board)
+legitCell board i = not $ elem (getValue board i) (getGroupValues board i)
                  
 -- Breaks up arguments and passes them on to pathHelper
 pathSolve :: Path -> Path

@@ -16,10 +16,9 @@ getGroupCoords :: (Int, Int) -> [(Int, Int)]
 getGroupCoords (x, y) =  (Set.toList (Set.fromList ((colCoords x) ++ (rowCoords y) ++ ninthCoords (x,y))))
 
 getGroupIndices :: Int -> [Int]
-getGroupIndices i = (dropValue (coordsToIndex (x,y))) $ map coordsToIndex $ getGroupCoords (x,y)
-  where
-    (x, y) = indexToCoords i
-
+getGroupIndices i = (dropValue i) $ map coordsToIndex $ getGroupCoords (x,y)
+  where (x,y) = indexToCoords i
+  
 colCoords :: Int -> [(Int, Int)]
 colCoords x = map (colAssist x) [0..8]
   where colAssist x y = (x, y)
@@ -37,16 +36,13 @@ ninthCoords (x, y) | x <= 2 = ninthAssist [0..2] y
                         | otherwise = comb z [6..8]
           where comb v w =  (,) <$> v <*> w
 
-getGroupValues :: Int -> [Int] -> [Int]
-getGroupValues i z = map (getValue z) (getGroupIndices i)
+getGroupValues :: Board -> Int -> [Int]
+getGroupValues board i = map (getValue board) (getGroupIndices i)
 
-getValue :: [Int] -> Int -> Int
-getValue v w = v !! w
-
-getConstraints :: Int -> [Int] -> [Int]
-getConstraints i z = dropValue 0 (Set.toList (Set.fromList (getGroupValues i z)))
+getValue :: Board -> Int -> Int
+getValue board i = board !! i
 
 dropValue :: Int -> [Int] -> [Int]
-dropValue x ls | ls == [] = []
-               | head ls == x = (dropValue x $ tail ls)
-               | head ls /= x = head ls : (dropValue x $ tail ls)
+dropValue x board | board == [] = []
+                  | head board == x = (dropValue x (tail board))
+                  | head board /= x = head board : (dropValue x (tail board))

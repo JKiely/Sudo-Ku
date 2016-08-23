@@ -63,11 +63,7 @@ main = hspec $ do
       
     it "can get group values" $ do
       let gValues = [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0]
-      (getGroupValues 71 board) `shouldBe` gValues
-      
-    it "can get constraints" $ do
-      let constraints = [2,5,7]
-      (getConstraints 71 board) `shouldBe` constraints
+      (getGroupValues board 71) `shouldBe` gValues
       
     it "can drop values from a list" $ do
       let l =  [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0,0]

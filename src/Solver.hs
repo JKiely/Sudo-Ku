@@ -1,9 +1,7 @@
 module Solver where
 
 import Board
-
 import Data.List (findIndex,splitAt)
-
 
 type Path = [(Board, [Int])]
 
@@ -20,25 +18,34 @@ pathSolve :: Path -> Path
 pathSolve (current:p) = pathHelper current p
 
 -- If a board has no legitimate next moves it is dropped
--- However if it does then it calls makeMove to make a move and appends that move to the path
+-- However if it does then it is passed to path helper 2
 pathHelper :: (Board,[Int]) -> Path -> Path
-pathHelper (board,[]) p = pathSolve p
-pathHelper (board,moves) p = if i == -1
+pathHelper (board, []) p = pathSolve p
+pathHelper (board, moves) p = findEmpty (board, moves) p
+
+-- Looks for an empty square, and passes it on to pathHelper 3 if it finds it
+findEmpty :: (Board, [Int]) -> Path -> Path
+findEmpty (board, moves) p = if i == -1
                              then [(board,[])]
-                             else case makeMove board moves i of Nothing -> pathSolve p
-                                                                 Just (new,moves') -> pathSolve $ (new,[1..9]) : (board,moves') : p 
+                             else (addMove board moves p i)
   where i = maybe (-1) id (findIndex (==0) board)
+
+-- Tries to make a move and add it to the path
+addMove board moves p i = case move of Nothing -> pathSolve p
+                                       Just (new,moves') -> pathSolve $ (new,[1..9]) : (board,moves') : p 
+ where move = makeMove board moves i
 
 -- Splits the board on the index and passes the parts to find legit
 makeMove :: Board -> [Int] -> Int -> Maybe (Board, [Int])
-makeMove board x i = findLegit (ba, bbs) x i
-  where (ba, bb:bbs) = splitAt i board
+makeMove board moves i = findLegit (rightBoard, leftBoard) moves i
+  where (rightBoard, _:leftBoard) = splitAt i board
        
 -- Takes a split board and returns a board with a legit move, or nothing
 findLegit :: ([Int],[Int]) -> [Int] -> Int -> Maybe (Board, [Int])
-findLegit (ba, bb) [] _ = Nothing
-findLegit (ba, bb) (x:xs) i = if legitCell nl i then Just (nl, xs) else findLegit (ba, bb) xs i
-                                where nl = (ba ++ [x] ++ bb)
+findLegit (rightBoard, leftBoard) [] _ = Nothing
+findLegit (rightBoard, leftBoard) (move:moves) i = if (legitCell newBoard i)
+                                                   then Just (newBoard, moves) else findLegit (rightBoard, leftBoard) moves i
+                                where newBoard = (rightBoard ++ [move] ++ leftBoard)
 
 -- the main fuction, call the pathSolve function and returns the board
 boardSolve :: Board -> Board

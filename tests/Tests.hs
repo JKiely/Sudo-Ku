@@ -3,6 +3,7 @@ module Main where
 import Test.Hspec
 
 import Builder
+import Board
 import Solver
 
 main :: IO ()

@@ -34,12 +34,6 @@ main = hspec $ do
                  0, 0, 0, 6, 0, 3, 0, 7, 0,
                  5, 0, 0, 2, 0, 0, 0, 0, 0,
                  1, 0, 4, 0, 0, 0, 0, 0, 0]
-                
-    it "checks if a board is full" $ do
-      (isFull [2,3,4,5]) `shouldBe` True
-      
-    it "knows if board isn't full" $ do
-      (isFull [2,0,4,5]) `shouldBe` False
       
     it "can get coords" $ do
       (indexToCoords 71) `shouldBe` (8,7)

@@ -5,6 +5,10 @@ import Data.List (findIndex,splitAt)
 
 type Path = [(Board, [Int])]
 
+--Wrapper function, calls whatever solve function we're using right now.
+solve :: Board -> Board
+solve board = (boardSolve board)
+
 -- Returns if a board is a legitimat solved board
 isLegit :: Board -> Bool
 isLegit board = and $ map (legitCell board) [0..80]

@@ -14,7 +14,7 @@ isLegit :: Board -> Bool
 isLegit board = and $ map (legitCell board) [0..80]
 
 -- Returns if a cell is currently not clashing with neighbors
-legitCell :: Board -> Int -> Bool
+legitCell :: Board -> Index -> Bool
 legitCell board i = not $ elem (getValue board i) (getGroupValues board i)
                  
 -- Breaks up arguments and passes them on to pathHelper
@@ -40,12 +40,12 @@ addMove board moves p i = case move of Nothing -> pathSolve p
  where move = makeMove board moves i
 
 -- Splits the board on the index and passes the parts to find legit
-makeMove :: Board -> [Int] -> Int -> Maybe (Board, [Int])
+makeMove :: Board -> [Int] -> Index -> Maybe (Board, [Int])
 makeMove board moves i = findLegit (rightBoard, leftBoard) moves i
   where (rightBoard, _:leftBoard) = splitAt i board
        
 -- Takes a split board and returns a board with a legit move, or nothing
-findLegit :: ([Int],[Int]) -> [Int] -> Int -> Maybe (Board, [Int])
+findLegit :: ([Int],[Int]) -> [Int] -> Index -> Maybe (Board, [Int])
 findLegit (rightBoard, leftBoard) [] _ = Nothing
 findLegit (rightBoard, leftBoard) (move:moves) i = if (legitCell newBoard i)
                                                    then Just (newBoard, moves) else findLegit (rightBoard, leftBoard) moves i

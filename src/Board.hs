@@ -3,31 +3,33 @@ module Board where
 import qualified Data.Set as Set
 
 type Board = [Int]
+type Coord = (Int, Int)
+type Index = Int
 
-indexToCoords :: Int -> (Int, Int)
+indexToCoords :: Index -> Coord
 indexToCoords index = (xCoord index, yCoord index)
   where xCoord index = (mod index 9)
         yCoord index = (div index 9)
 
-coordsToIndex :: (Int, Int) -> Int
+coordsToIndex :: Coord -> Index
 coordsToIndex (x, y) = (y*9)+x
 
-getGroupCoords :: (Int, Int) -> [(Int, Int)]
+getGroupCoords :: Coord -> [Coord]
 getGroupCoords (x, y) =  (Set.toList (Set.fromList ((colCoords x) ++ (rowCoords y) ++ ninthCoords (x,y))))
 
-getGroupIndices :: Int -> [Int]
+getGroupIndices :: Index -> [Index]
 getGroupIndices i = (dropValue i) $ map coordsToIndex $ getGroupCoords (x,y)
   where (x,y) = indexToCoords i
   
-colCoords :: Int -> [(Int, Int)]
+colCoords :: Int -> [Coord]
 colCoords x = map (colAssist x) [0..8]
   where colAssist x y = (x, y)
 
-rowCoords :: Int -> [(Int, Int)]
+rowCoords :: Int -> [Coord]
 rowCoords y = map (rowAssit y) [0..8]
   where rowAssit y x = (x, y)
 
-ninthCoords :: (Int, Int) -> [(Int, Int)]
+ninthCoords :: Coord -> [Coord]
 ninthCoords (x, y) | x <= 2 = ninthAssist [0..2] y
                    | x <= 5 = ninthAssist [3..5] y
                    | otherwise = ninthAssist [6..8] y
@@ -36,10 +38,10 @@ ninthCoords (x, y) | x <= 2 = ninthAssist [0..2] y
                         | otherwise = comb z [6..8]
           where comb v w =  (,) <$> v <*> w
 
-getGroupValues :: Board -> Int -> [Int]
+getGroupValues :: Board -> Index -> [Index]
 getGroupValues board i = map (getValue board) (getGroupIndices i)
 
-getValue :: Board -> Int -> Int
+getValue :: Board -> Index -> Int
 getValue board i = board !! i
 
 dropValue :: Int -> [Int] -> [Int]

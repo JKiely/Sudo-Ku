@@ -30,16 +30,19 @@ pathHelper (board, moves) p = findEmpty (board, moves) p
 
 -- Looks for an empty square, and passes it on to addMove if it finds it
 findEmpty :: Branch -> Path -> Path
-findEmpty (board, moves) p = if i == -1
-                             then [(board,[])]
-                             else (addMove board moves p i)
-  where i = maybe (-1) id (findIndex (==0) board)
+findEmpty (board, moves) p = case index of Nothing ->
+                                             [(board,[])]
+                                           Just index ->
+                                             (addMove board moves p index)
+  where index = (findIndex (==0) board)
 
 -- Tries to make a move and add it to the path
 addMove :: Board -> [Int] -> Path -> Index -> Path
-addMove board moves p i = case move of Nothing -> pathSolve p
-                                       Just (new,moves') -> pathSolve $ (new,[1..9]) : (board,moves') : p 
- where move = makeMove board moves i
+addMove board moves p i = case move of Nothing ->
+                                         pathSolve p
+                                       Just (new,moves') ->
+                                         pathSolve $ (new,[1..9]) : (board,moves') : p
+  where move = makeMove board moves i
 
 -- Splits the board on the index and passes the parts to find legit
 makeMove :: Board -> [Int] -> Index -> Maybe (Board, [Int])

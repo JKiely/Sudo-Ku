@@ -3,7 +3,8 @@ module Solver where
 import Board
 import Data.List (findIndex,splitAt)
 
-type Path = [(Board, [Int])]
+type Branch = (Board, [Int])
+type Path = [Branch]
 
 --Wrapper function, calls whatever solve function we're using right now.
 solve :: Board -> Board
@@ -23,18 +24,19 @@ pathSolve (current:p) = pathHelper current p
 
 -- If a board has no legitimate next moves it is dropped
 -- However if it does then it is passed to path helper 2
-pathHelper :: (Board,[Int]) -> Path -> Path
+pathHelper :: Branch -> Path -> Path
 pathHelper (board, []) p = pathSolve p
 pathHelper (board, moves) p = findEmpty (board, moves) p
 
 -- Looks for an empty square, and passes it on to pathHelper 3 if it finds it
-findEmpty :: (Board, [Int]) -> Path -> Path
+findEmpty :: Branch -> Path -> Path
 findEmpty (board, moves) p = if i == -1
                              then [(board,[])]
                              else (addMove board moves p i)
   where i = maybe (-1) id (findIndex (==0) board)
 
 -- Tries to make a move and add it to the path
+addMove :: Board -> [Int] -> Path -> Index -> Path
 addMove board moves p i = case move of Nothing -> pathSolve p
                                        Just (new,moves') -> pathSolve $ (new,[1..9]) : (board,moves') : p 
  where move = makeMove board moves i

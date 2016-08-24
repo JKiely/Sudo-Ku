@@ -23,12 +23,12 @@ pathSolve :: Path -> Path
 pathSolve (current:p) = pathHelper current p
 
 -- If a board has no legitimate next moves it is dropped
--- However if it does then it is passed to path helper 2
+-- However if it does then it is passed to path findEmpty
 pathHelper :: Branch -> Path -> Path
 pathHelper (board, []) p = pathSolve p
 pathHelper (board, moves) p = findEmpty (board, moves) p
 
--- Looks for an empty square, and passes it on to pathHelper 3 if it finds it
+-- Looks for an empty square, and passes it on to addMove if it finds it
 findEmpty :: Branch -> Path -> Path
 findEmpty (board, moves) p = if i == -1
                              then [(board,[])]

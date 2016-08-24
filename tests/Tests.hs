@@ -162,4 +162,8 @@ main = hspec $ do
         
     it "Can solve a normal sudoku" $ do
       (boardSolve normal) `shouldBe` solved2
-  
+
+--    it "Can solve a hard sudoku" $ do
+--      let hard = [4, 0, 0, 0, 0, 0, 8, 0, 5, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 8, 0, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 6, 0, 3, 0, 7, 0, 5, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 4, 0, 0, 0, 0, 0, 0]
+--          solved = (boardSolve hard)
+--      (isLegit solved) `shouldBe` True

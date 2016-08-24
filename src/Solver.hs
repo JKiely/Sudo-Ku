@@ -1,6 +1,7 @@
 module Solver where
 
 import Board
+import Hshuffle
 import Data.List (findIndex,splitAt)
 
 type Branch = (Board, [Int])
@@ -42,7 +43,7 @@ addMove :: Board -> [Int] -> Path -> Index -> Path
 addMove board moves p i = case move of Nothing ->
                                          pathSolve p
                                        Just (new,moves') ->
-                                         pathSolve $ (new,[1..9]) : (board,moves') : p
+                                         pathSolve $ (new, shuffle [1..9]) : (board,moves') : p
   where move = makeMove board moves i
 
 -- Splits the board on the index and passes the parts to find legit
@@ -59,5 +60,4 @@ findLegit (rightBoard, leftBoard) (move:moves) i = if (legitCell newBoard i)
 
 -- the main fuction, call the pathSolve function and returns the board
 boardSolve :: Board -> Board
-boardSolve board = fst $ head (pathSolve [(board, [1..9])])
-
+boardSolve board = fst $ head (pathSolve [(board, shuffle [1..9])])

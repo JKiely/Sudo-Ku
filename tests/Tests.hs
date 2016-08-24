@@ -147,6 +147,9 @@ main = hspec $ do
       
     it "knows if a solution is wrong" $ do
       (isLegit wrong) `shouldBe` False
+
+    it "knows an incomplete board is wrong" $ do
+      (isLegit oneoff) `shouldBe` False
       
     it "Knows if a cell is wrong" $ do
       (legitCell wrong 80) `shouldBe` False

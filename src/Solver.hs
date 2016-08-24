@@ -12,11 +12,12 @@ solve board = (boardSolve board)
 
 -- Returns if a board is a legitimat solved board
 isLegit :: Board -> Bool
-isLegit board = and $ map (legitCell board) [0..80]
+isLegit board = not (0 `elem` board) && (and $ map (legitCell board) [0..80])
 
 -- Returns if a cell is currently not clashing with neighbors
 legitCell :: Board -> Index -> Bool
-legitCell board i = not $ elem (getValue board i) (getGroupValues board i)
+legitCell board i = not $ elem (value) (getGroupValues board i)
+  where value = getValue board i
                  
 -- Breaks up arguments and passes them on to pathHelper
 pathSolve :: Path -> Path

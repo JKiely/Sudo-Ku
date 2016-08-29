@@ -1,8 +1,9 @@
 module Board where
 
-import qualified Data.Set as Set
+import qualified Data.Vector as V
+import Data.List (nub)
 
-type Board = [Int]
+type Board = V.Vector Int
 type Coord = (Int, Int)
 type Index = Int
 
@@ -14,11 +15,12 @@ indexToCoords index = (xCoord index, yCoord index)
 coordsToIndex :: Coord -> Index
 coordsToIndex (x, y) = (y*9)+x
 
-getGroupCoords :: Coord -> [Coord]
-getGroupCoords (x, y) =  (Set.toList (Set.fromList ((colCoords x) ++ (rowCoords y) ++ ninthCoords (x,y))))
 
-getGroupIndices :: Index -> [Index]
-getGroupIndices i = (dropValue i) $ map coordsToIndex $ getGroupCoords (x,y)
+getGroupCoords :: Coord -> V.Vector Coord
+getGroupCoords (x, y) =  ((V.fromList . nub) ((colCoords x) ++ (rowCoords y) ++ ninthCoords (x,y)))
+
+getGroupIndices :: Index -> V.Vector Index
+getGroupIndices i = (dropValue i) $ V.map coordsToIndex $ getGroupCoords (x,y)
   where (x,y) = indexToCoords i
   
 colCoords :: Int -> [Coord]
@@ -38,13 +40,11 @@ ninthCoords (x, y) | x <= 2 = ninthAssist [0..2] y
                         | otherwise = comb z [6..8]
           where comb v w =  (,) <$> v <*> w
 
-getGroupValues :: Board -> Index -> [Index]
-getGroupValues board i = map (getValue board) (getGroupIndices i)
+getGroupValues :: Board -> Index -> V.Vector Index
+getGroupValues board i = V.map (getValue board) (getGroupIndices i)
 
 getValue :: Board -> Index -> Int
-getValue board i = board !! i
+getValue board i = board V.! i
 
-dropValue :: Int -> [Int] -> [Int]
-dropValue x board | board == [] = []
-                  | head board == x = (dropValue x (tail board))
-                  | head board /= x = head board : (dropValue x (tail board))
+dropValue :: Int -> V.Vector Int -> V.Vector Int
+dropValue x board = V.filter (/=x) board

@@ -22,6 +22,7 @@ library
   build-depends:       base >= 4.7 && < 5,
                        containers
                      , random
+                     , vector
   default-language:    Haskell2010
 
 executable sudo-ku-exe
@@ -39,7 +40,8 @@ test-suite tests
   hs-source-dirs:      tests
   build-depends:       base,
                        sudo-ku,
-                       hspec
+                       hspec,
+                       vector
   default-language:    Haskell2010
 
 source-repository head

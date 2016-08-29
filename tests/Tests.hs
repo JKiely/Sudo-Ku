@@ -1,6 +1,7 @@
 module Main where
 
 import Test.Hspec
+import Data.Vector (Vector(..), fromList)
 
 import Builder
 import Board
@@ -11,7 +12,7 @@ main = hspec $ do
   describe "Builder" $ do
     it "makes a board" $ do
       let inputString = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
-      let outputArray = [4, 0, 0, 0, 0, 0, 8, 0, 5,
+      let outputArray = fromList [4, 0, 0, 0, 0, 0, 8, 0, 5,
                          0, 3, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 7, 0, 0, 0, 0, 0,
                          0, 2, 0, 0, 0, 0, 0, 6, 0,
@@ -25,7 +26,7 @@ main = hspec $ do
       grid `shouldBe`  outputArray
 
   describe "Board" $ do
-    let board = [4, 0, 0, 0, 0, 0, 8, 0, 5,
+    let board = fromList [4, 0, 0, 0, 0, 0, 8, 0, 5,
                  0, 3, 0, 0, 0, 0, 0, 0, 0,
                  0, 0, 0, 7, 0, 0, 0, 0, 0,
                  0, 2, 0, 0, 0, 0, 0, 6, 0,
@@ -54,24 +55,24 @@ main = hspec $ do
       
       (ninthCoords (8, 7)) `shouldBe` nCoords
     it "can get group coords" $ do -- Refactor, redundant?
-      let gCoords = [(0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6), (8,7),(8,8)]
+      let gCoords = fromList [(8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6),(8,7),(8,8),(0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,7),(7,7),(6,6),(6,8),(7,6),(7,8)]
       (getGroupCoords (8, 7)) `shouldBe` gCoords
       
     it "can get group indices" $ do
-      let gIndices = [63,64,65,66,67,68,60,69,78,61,70,79,8,17,26,35,44,53,62,80]
+      let gIndices = fromList [8,17,26,35,44,53,62,80,63,64,65,66,67,68,69,70,60,78,61,79]
       (getGroupIndices 71) `shouldBe` gIndices
       
     it "can get group values" $ do
-      let gValues = [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0]
+      let gValues = fromList [5,0,0,0,0,0,0,0,5,0,0,2,0,0,0,0,0,0,7,0]
       (getGroupValues board 71) `shouldBe` gValues
       
     it "can drop values from a list" $ do
-      let l =  [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0,0]
-      dropValue 0 l `shouldBe` [5,2,7,5]
+      let l =  fromList [5,0,0,2,0,0,0,0,0,7,0,0,5,0,0,0,0,0,0,0,0]
+      dropValue 0 l `shouldBe` (fromList [5,2,7,5])
       
 
   describe "Solver" $ do
-    let complete = [4,8,3,9,2,1,6,5,7,
+    let complete = fromList [4,8,3,9,2,1,6,5,7,
                     9,6,7,3,4,5,8,2,1,
                     2,5,1,8,7,6,4,9,3,
                     5,4,8,1,3,2,9,7,6,
@@ -81,7 +82,7 @@ main = hspec $ do
                     8,1,4,2,5,3,7,6,9,
                     6,9,5,4,1,7,3,8,2]
                    
-        wrong =  [4,8,3,9,2,1,6,5,7,
+        wrong =  fromList [4,8,3,9,2,1,6,5,7,
                   9,6,7,3,4,5,8,2,1,
                   2,5,1,8,7,6,4,9,3,
                   5,4,8,1,3,2,9,7,6,
@@ -91,7 +92,7 @@ main = hspec $ do
                   8,1,4,2,5,3,7,6,9,
                   6,9,5,4,1,7,3,8,9]
 
-        oneoff = [0,8,3,9,2,1,6,5,7,
+        oneoff = fromList [0,8,3,9,2,1,6,5,7,
                   9,6,7,3,4,5,8,2,1,
                   2,5,1,8,7,6,4,9,3,
                   5,4,8,1,3,2,9,7,6,
@@ -101,7 +102,7 @@ main = hspec $ do
                   8,1,4,2,5,3,7,6,9,
                   6,9,5,4,1,7,3,8,2]
                  
-        severaloff = [0,0,0,0,2,1,6,5,7,
+        severaloff = fromList [0,0,0,0,2,1,6,5,7,
                       9,6,7,3,4,5,8,0,1,
                       2,5,0,8,7,6,4,9,3,
                       5,4,8,1,3,2,9,7,6,
@@ -111,7 +112,7 @@ main = hspec $ do
                       8,1,4,2,5,3,7,6,9,
                       6,9,5,4,1,7,3,0,0]
                     
-        solved1 = [4,8,3,9,2,1,6,5,7,
+        solved1 = fromList [4,8,3,9,2,1,6,5,7,
                   9,6,7,3,4,5,8,2,1,
                   2,5,1,8,7,6,4,9,3,
                   5,4,8,1,3,2,9,7,6,
@@ -121,7 +122,7 @@ main = hspec $ do
                   8,1,4,2,5,3,7,6,9,
                   6,9,5,4,1,7,3,8,2]
 
-        normal = [0, 0, 3, 0, 2, 0, 6, 0, 0,
+        normal = fromList [0, 0, 3, 0, 2, 0, 6, 0, 0,
                   9, 0, 0, 3, 0, 5, 0, 0, 1,
                   0, 0, 1, 8, 0, 6, 4, 0, 0,
                   0, 0, 8, 1, 0, 2, 9, 0, 0,
@@ -131,7 +132,7 @@ main = hspec $ do
                   8, 0, 0, 2, 0, 3, 0, 0, 9,
                   0, 0, 5, 0, 1, 0, 3, 0, 0]
                  
-        solved2 = [4, 8, 3, 9, 2, 1, 6, 5, 7,
+        solved2 = fromList [4, 8, 3, 9, 2, 1, 6, 5, 7,
                    9, 6, 7, 3, 4, 5, 8, 2, 1,
                    2, 5, 1, 8, 7, 6, 4, 9, 3,
                    5, 4, 8, 1, 3, 2, 9, 7, 6,

@@ -1,8 +1,9 @@
 module Builder where
 
+import Data.Vector (Vector(..), cons, fromList)
 import Data.Char
 
-build :: String -> [Int]
-build "" = []
-build (x:xs) | x == '.' = 0 : build xs
-             | otherwise = (digitToInt x) : (build xs)
+build :: String -> Vector Int
+build "" = fromList []
+build (x:xs) | x == '.' = 0 `cons` build xs
+             | otherwise = (digitToInt x) `cons` (build xs)

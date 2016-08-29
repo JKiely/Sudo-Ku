@@ -1,5 +1,6 @@
 module Solver where
 
+import qualified Data.Vector as V
 import Board
 import Hshuffle
 import Data.List (findIndex,splitAt)
@@ -36,7 +37,7 @@ findEmpty (board, moves) p = case index of Nothing ->
                                              [(board,[])]
                                            Just index ->
                                              (addMove board moves p index)
-  where index = (findIndex (==0) board)
+  where index = (V.findIndex (==0) board)
 
 -- Tries to make a move and add it to the path
 addMove :: Board -> [Int] -> Path -> Index -> Path
@@ -48,15 +49,15 @@ addMove board moves p i = case move of Nothing ->
 
 -- Splits the board on the index and passes the parts to find legit
 makeMove :: Board -> [Int] -> Index -> Maybe (Board, [Int])
-makeMove board moves i = findLegit (rightBoard, leftBoard) moves i
-  where (rightBoard, _:leftBoard) = splitAt i board
+makeMove board moves i = findLegit (rightBoard, V.tail leftBoard) moves i
+  where (rightBoard, leftBoard) = V.splitAt i board
        
 -- Takes a split board and returns a board with a legit move, or nothing
-findLegit :: ([Int],[Int]) -> [Int] -> Index -> Maybe (Board, [Int])
+findLegit :: (V.Vector Int, V.Vector Int) -> [Int] -> Index -> Maybe (Board, [Int])
 findLegit (rightBoard, leftBoard) [] _ = Nothing
 findLegit (rightBoard, leftBoard) (move:moves) i = if (legitCell newBoard i)
                                                    then Just (newBoard, moves) else findLegit (rightBoard, leftBoard) moves i
-                                where newBoard = (rightBoard ++ [move] ++ leftBoard)
+                                where newBoard = (rightBoard V.++ (V.fromList [move]) V.++ leftBoard)
 
 -- the main fuction, call the pathSolve function and returns the board
 boardSolve :: Board -> Board
